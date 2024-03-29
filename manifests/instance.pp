@@ -12,13 +12,13 @@
 # [*version*]
 #   Required. Version keyword. For Debian/Ubuntu, this will be a string like
 #   "oneiric". For yum set the major release version, like "5" or "6"
-# 
+#
 # [*repotype*]
 #   Required. "apt" or "yum". apt repos are created using reprepro, yum repos
 #   using createrepo
 #
 # [*incoming*]
-#   true or false. Enable a incoming directory for this repo. Default true. 
+#   true or false. Enable a incoming directory for this repo. Default true.
 #
 # [*arch*]
 #   Architecture string to set in the repo config. For yum repos this is
@@ -60,7 +60,7 @@ define repo::instance (
 
   # Validate repo type
   if ! ($repotype in ['apt','yum','gem']) {
-    fail "Non-supported repository type"
+    fail 'Non-supported repository type'
   }
 
   if is_array($version) {
@@ -84,7 +84,7 @@ define repo::instance (
   # Create incoming repo dir
   file { "${repo::basedir}/${repotype}/incoming/${name}":
     ensure => $incoming? { true => directory, default => absent },
-    force => true
+    force  => true
   }
 
   # Incron entry
@@ -104,7 +104,7 @@ define repo::instance (
     file { "${repodir}/conf":
       ensure => directory,
     }
-    file { 
+    file {
       "${repodir}/conf/distributions":
         ensure  => present,
         content => template("${module_name}/apt-distributions.erb");
@@ -133,18 +133,18 @@ define repo::instance (
     # If not upload, root should own incoming
     $incoming_dir = prefix($real_version, "${repo::basedir}/${repotype}/incoming/${name}/")
     file { $incoming_dir:
-      ensure => $incoming? {
-        true => directory,
+      ensure  => $incoming? {
+        true    => directory,
         default => absent },
-      force => true,
+      force   => true,
       require => File["${repo::basedir}/${repotype}/incoming/${name}"],
-      owner => $upload? { true => $repo::user, default => root },
-      group => $upload? { true => $repo::group, default => root },
+      owner   => $upload? { true => $repo::user, default => root },
+      group   => $upload? { true => $repo::group, default => root },
     }
 
     $pub_dir = prefix($real_version, "${repodir}/")
     file { $pub_dir:
-      ensure => directory,
+      ensure  => directory,
       require => File[$repodir]
     }
 
@@ -154,17 +154,4 @@ define repo::instance (
     }
   }
 
-}
-
-define repo::instance::yum_rhel_symlink() {
-
-  file { "${name}Server":
-    ensure => link,
-    target => $name
-  }
-
-  file { "${name}Workstation":
-    ensure => link,
-    target => $name
-  }
 }
