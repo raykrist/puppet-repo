@@ -37,9 +37,7 @@ class repo::config(
   }
 
   file { $incoming_dir:
-    ensure => $incoming? {
-      true    => directory,
-      default => absent },
+    ensure => $incoming? { true => directory, default => absent },
     force  => true
   }
 

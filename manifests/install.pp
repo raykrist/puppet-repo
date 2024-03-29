@@ -19,7 +19,7 @@ class repo::install(
   File {
     owner => 'root',
     group => 'root',
-    mode => '0755',
+    mode  => '0755',
   }
 
   file { "${scriptdir}/apt-updaterepo":

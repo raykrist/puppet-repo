@@ -48,23 +48,22 @@
 # Christian Bryn <christian.bryn@freecode.no>
 #
 class repo (
-  $repo_types = [ 'yum', 'apt', 'gem'],
-  $basedir = '/var/lib/repo',
-  $scriptdir = '/usr/local/bin',
-  $user = 'repo',
-  $uid = 505,
-  $group = 'repo',
-  $gid = 505,
-  $incoming = true,
-  $generate_gpgkey = false,
-  $user_keys = {}
+  Array $repo_types = [ 'yum', 'apt', 'gem'],
+  String $basedir = '/var/lib/repo',
+  String $scriptdir = '/usr/local/bin',
+  String $user = 'repo',
+  Integer $uid = 505,
+  String $group = 'repo',
+  Integer $gid = 505,
+  Boolean $incoming = true,
+  Boolean $generate_gpgkey = false,
+  Hash $user_keys = {}
 ) {
 
-  validate_array($repo_types)
+  class { 'repo::install': }
+  -> class { 'repo::config': }
+  -> class { 'repo::service': }
 
-  class { 'repo::install': } ->
-  class { 'repo::config': } ->
-  class { 'repo::service': }
   if $generate_gpgkey and $incoming {
     class { 'repo::keygen':
       require => Class['repo::config']
