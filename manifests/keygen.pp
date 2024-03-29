@@ -1,11 +1,13 @@
 #
 class repo::keygen(
-  $keyname,
-  $email,
-  $keylen = 4096,
-  $desc = '',
-  $user = $repo::user,
-  $basedir = $repo::basedir
+  String $keyname,
+  String $email,
+  String $desc,
+  String $passphrase = "''",
+  Integer $keylen = 4096,
+  String $user = $repo::user,
+  String $basedir = $repo::basedir,
+  Array $packages = ['rng-tools']
 ) {
 
   Exec {
@@ -13,7 +15,11 @@ class repo::keygen(
     user => $user
   }
 
-  file { "/${basedir}/gpg-keygen":
+  package { $packages:
+    ensure => installed
+  }
+
+  file { "${basedir}/gpg-keygen":
     owner   => $user,
     mode    => '0644',
     content => template("${module_name}/keygen.erb"),
@@ -27,14 +33,14 @@ class repo::keygen(
   }
 
   exec { 'repo gpg --key-gen':
-    command     => "gpg --batch --gen-key ${basedir}/gpg-keygen",
+    command     => "gpg --batch --quick-gen-key --passphrase ${passphrase} ${basedir}/gpg-keygen",
     refreshonly => true,
     notify      => Exec['repo export gpg pub key']
   }
 
   exec { 'repo gpg keygen trigger':
     command => 'echo',
-    unless  => "test -s ${basedir}/.gnupg/pubring.gpg",
+    unless  => "test -s ${basedir}/.gnupg/pubring.kbx",
     notify  => Exec['repo rngd urandom']
   } -> exec { 'repo export gpg pub key':
     command => "gpg --armor --output ${basedir}/apt/pub/gpg.key --export ${email}",

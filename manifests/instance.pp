@@ -63,7 +63,7 @@ define repo::instance (
     fail 'Non-supported repository type'
   }
 
-  if is_array($version) {
+  if $version =~ Array {
     $real_version = $version
   } else {
     $real_version = [ $version ]
