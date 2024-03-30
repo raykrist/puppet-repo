@@ -33,7 +33,7 @@ class repo::keygen(
   }
 
   exec { 'repo gpg --key-gen':
-    command     => "gpg --batch --quick-gen-key --passphrase ${passphrase} ${basedir}/gpg-keygen",
+    command     => "gpg --batch --gen-key ${basedir}/gpg-keygen",
     refreshonly => true,
     notify      => Exec['repo export gpg pub key']
   }
