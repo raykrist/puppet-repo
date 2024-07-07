@@ -1,7 +1,7 @@
 <% @real_version.each do |codename| -%>
 Origin: <%= @name %>
 Codename: <%= codename %>
-Architectures: <%= @arch %>
+Architectures: <%= @arch.join(' ') %>
 Components: main
 Description: <%= @description %>
 <% if @sign == true -%>
