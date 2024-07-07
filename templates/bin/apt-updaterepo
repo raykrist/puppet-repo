@@ -20,7 +20,7 @@ repo="$base/pub/$name"
 codename=$(echo $file |cut -d'_' -f 2|tr -d [[:punct:],[:digit:]])
 
 # Update repo
-/bin/su -c "/usr/local/bin/reprepro --keepunreferencedfiles -s -b "$repo" --waitforlock 360 includedeb "$codename" "$incoming/$file" >/dev/null" <%= scope.lookupvar("repo::user") %>
+/bin/su -c "/usr/bin/reprepro --keepunreferencedfiles -s -b "$repo" --waitforlock 360 includedeb "$codename" "$incoming/$file" >/dev/null" <%= scope.lookupvar("repo::user") %>
 logger -t apt-updaterepo Adding $file to $repo with codename: $codename
 rm "$incoming/$file"
 
