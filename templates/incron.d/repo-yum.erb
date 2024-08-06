@@ -1,3 +1,3 @@
 <% @real_version.each do |releasever| -%>
-<%= scope.lookupvar("repo::basedir")%>/<%= @repotype %>/incoming/<%= @name %>/<%=releasever %> IN_CLOSE_WRITE,IN_NO_LOOP /usr/local/bin/<%= @repotype %>-updaterepo $@ $#
+<%= scope.lookupvar("repo::basedir")%>/<%= @repotype %>/incoming/<%= @name %>/<%=releasever %> IN_CLOSE_WRITE,loopable=true /usr/local/bin/<%= @repotype %>-updaterepo $@ $#
 <% end -%>

@@ -1,1 +1,1 @@
-<%= scope.lookupvar("repo::basedir") %>/<%= @repotype %>/incoming/<%= @name %> IN_CLOSE_WRITE,IN_NO_LOOP /usr/local/bin/<%= @repotype %>-updaterepo $@ $#
+<%= scope.lookupvar("repo::basedir") %>/<%= @repotype %>/incoming/<%= @name %> IN_CLOSE_WRITE,loopable=true /usr/local/bin/<%= @repotype %>-updaterepo $@ $#
